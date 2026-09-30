@@ -1,0 +1,43 @@
+[project]
+name = "kasauti-workspace"
+version = "0.1.0"
+description = "Hinglish clinic voice receptionist, and Kasauti: the harness that breaks it, measures it and proves each fix."
+requires-python = ">=3.12,<3.13"
+
+[tool.uv]
+package = false
+# audiomentations still pins soxr<1.0 while pipecat-ai needs soxr>=1.0. soxr 1.0 kept the
+# resample() API audiomentations calls, so we override its upper bound.
+override-dependencies = ["soxr>=1.0,<1.1"]
+
+[tool.uv.workspace]
+members = ["services/clinic_api", "services/voice_agent", "services/kasauti"]
+
+[tool.uv.sources]
+clinic-api = { workspace = true }
+voice-agent = { workspace = true }
+kasauti = { workspace = true }
+
+[dependency-groups]
+dev = [
+  "clinic-api",
+  "voice-agent",
+  "kasauti",
+  "pytest>=8.3",
+  "pytest-asyncio>=0.24",
+  "ruff>=0.8",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "ASYNC"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["clinic_api", "voice_agent", "kasauti"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["services/clinic_api/tests"]

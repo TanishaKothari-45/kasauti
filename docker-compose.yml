@@ -1,0 +1,47 @@
+# Local dev: only Postgres runs in Docker.
+# The voice agent runs natively so mlx-whisper can use the M1's GPU (Metal isn't available inside Docker).
+# `docker compose --profile full up` also runs the API and web app in containers (deploy rehearsal).
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: kasauti
+      POSTGRES_PASSWORD: kasauti
+      POSTGRES_DB: clinic
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kasauti -d clinic"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  clinic-api:
+    profiles: ["full"]
+    build:
+      context: .
+      dockerfile: services/clinic_api/Dockerfile
+    environment:
+      DATABASE_URL: postgresql+asyncpg://kasauti:kasauti@postgres:5432/clinic
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  web:
+    profiles: ["full"]
+    build:
+      context: ./web
+    environment:
+      NEXT_PUBLIC_CLINIC_API_URL: http://localhost:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - clinic-api
+
+volumes:
+  pgdata:

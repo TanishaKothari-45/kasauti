@@ -3019,16 +3019,24 @@ name = "voice-agent"
 version = "0.1.0"
 source = { editable = "services/voice_agent" }
 dependencies = [
+    { name = "fastapi" },
+    { name = "google-genai" },
     { name = "httpx" },
     { name = "pipecat-ai", extra = ["google", "groq", "kokoro", "local-smart-turn", "mlx-whisper", "runner", "sarvam", "tracing", "webrtc", "whisper"] },
+    { name = "pydantic-settings" },
     { name = "python-dotenv" },
+    { name = "uvicorn", extra = ["standard"] },
 ]
 
 [package.metadata]
 requires-dist = [
+    { name = "fastapi", specifier = ">=0.115" },
+    { name = "google-genai", specifier = ">=2.0" },
     { name = "httpx", specifier = ">=0.28" },
     { name = "pipecat-ai", extras = ["webrtc", "runner", "silero", "local-smart-turn", "mlx-whisper", "whisper", "kokoro", "google", "groq", "sarvam", "tracing"], specifier = ">=1.12" },
+    { name = "pydantic-settings", specifier = ">=2.6" },
     { name = "python-dotenv", specifier = ">=1.0" },
+    { name = "uvicorn", extras = ["standard"], specifier = ">=0.32" },
 ]
 
 [[package]]

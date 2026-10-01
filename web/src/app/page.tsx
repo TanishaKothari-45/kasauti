@@ -1,92 +1,76 @@
-import { Panel } from "@/components/Panel";
-import { Pill } from "@/components/Pill";
-import { ServiceStatus } from "@/components/ServiceStatus";
+import Link from "next/link";
+import { ReceptionistCard } from "@/components/ReceptionistCard";
 
-const STACK = [
-  ["Turn-taking", "Silero VAD + Smart Turn"],
-  ["Speech → text", "Whisper large-v3-turbo (mlx)"],
-  ["Brain + tools", "Gemini Flash"],
-  ["Text → speech", "Kokoro-82M"],
+const CAN_DO = [
+  ["Book", "a visit with the right doctor"],
+  ["Reschedule", "to a slot that suits you"],
+  ["Cancel", "without waiting on hold"],
+  ["Answer", "timings, fees and test preparation"],
 ];
 
-const LOOP = [
-  ["Build", "Receptionist: voice, tools, clinic knowledge"],
-  ["Break", "Callers with noise, 8 kHz lines, code-mixing, interruptions"],
-  ["Measure", "Task success, recognition error, latency, barge-in, safety"],
-  ["Fix", "One failure category per round, before/after numbers"],
+const HOURS = [
+  ["Mon – Sat", "10:00 – 13:00 · 17:00 – 20:00"],
+  ["Sunday", "Closed"],
 ];
 
 export default function Home() {
   return (
-    <main className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-8 sm:px-6">
-      <header className="flex flex-wrap items-end justify-between gap-3 border-b-2 border-ink pb-5">
-        <div className="flex flex-col gap-1">
-          <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-gold">
-            कसौटी · the touchstone
-          </span>
-          <h1 className="text-3xl font-semibold tracking-tight">Kasauti console</h1>
-          <p className="max-w-2xl text-sm text-muted">
-            A Hinglish voice receptionist for a small clinic, and the harness that breaks it,
-            measures it and proves every fix.
-          </p>
-        </div>
-        <Pill tone="good">stack: local</Pill>
+    <div className="flex min-h-full flex-col">
+      <header className="border-b border-rule bg-surface">
+        <nav className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
+          <span className="text-lg font-semibold tracking-tight">Arogya Clinic</span>
+          <Link
+            href="/console"
+            className="font-mono text-xs text-muted underline-offset-4 hover:text-ink hover:underline"
+          >
+            Developer console →
+          </Link>
+        </nav>
       </header>
 
-      <ServiceStatus />
-
-      <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
-        <Panel eyebrow="Arrives Day 2" title="Clinic data">
-          <p className="text-sm text-muted">
-            Doctors, open slots and bookings from the clinic API will show here once the schema and
-            endpoints are built.
-          </p>
-        </Panel>
-
-        <div className="flex flex-col gap-6">
-          <Panel eyebrow="Arrives Day 4" title="Talk to the receptionist">
-            <p className="mb-4 text-sm text-muted">
-              Speak from your browser in Hindi or English. The agent books, reschedules and cancels
-              against the clinic above.
+      <main className="mx-auto grid w-full max-w-6xl flex-1 items-start gap-10 px-4 py-12 sm:px-6 lg:grid-cols-[1fr_420px]">
+        <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-4">
+            <span className="font-mono text-xs uppercase tracking-[0.16em] text-gold">
+              Family clinic · Bengaluru
+            </span>
+            <h1 className="max-w-xl text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
+              Talk to Asha. She&apos;ll sort your appointment.
+            </h1>
+            <p className="max-w-lg text-lg text-muted">
+              Our receptionist answers in Hindi, English or a bit of both, any time the clinic is
+              open. Urgent symptoms go straight to a doctor on duty.
             </p>
-            <button
-              type="button"
-              disabled
-              className="w-full cursor-not-allowed rounded-md border border-rule bg-ground px-4 py-2.5 text-sm font-medium text-faint"
-            >
-              Start call · not built yet
-            </button>
-          </Panel>
+          </div>
 
-          <Panel eyebrow="VOICE_STACK=local" title="Voice stack">
-            <dl className="flex flex-col gap-2 text-sm">
-              {STACK.map(([part, model]) => (
-                <div key={part} className="flex justify-between gap-3">
-                  <dt className="text-muted">{part}</dt>
-                  <dd className="text-right font-mono text-xs">{model}</dd>
-                </div>
-              ))}
-            </dl>
-          </Panel>
+          <ul className="grid max-w-lg grid-cols-1 gap-3 sm:grid-cols-2">
+            {CAN_DO.map(([verb, rest]) => (
+              <li key={verb} className="rounded-xl border border-rule bg-surface px-4 py-3 text-sm">
+                <span className="font-semibold">{verb}</span>{" "}
+                <span className="text-muted">{rest}</span>
+              </li>
+            ))}
+          </ul>
+
+          <dl className="flex max-w-lg flex-col gap-1.5 border-t border-rule pt-5 text-sm">
+            <dt className="mb-1 font-mono text-[11px] uppercase tracking-wider text-faint">
+              OPD timings
+            </dt>
+            {HOURS.map(([days, time]) => (
+              <dd key={days} className="flex justify-between gap-4">
+                <span className="text-muted">{days}</span>
+                <span className="font-mono tabular-nums">{time}</span>
+              </dd>
+            ))}
+          </dl>
         </div>
-      </div>
 
-      <Panel eyebrow="Kasauti · no runs yet" title="The loop">
-        <ol className="grid gap-px overflow-hidden rounded-md border border-rule bg-rule sm:grid-cols-2 lg:grid-cols-4">
-          {LOOP.map(([step, what], i) => (
-            <li key={step} className="flex flex-col gap-1 bg-surface p-4">
-              <span className="font-mono text-[10px] tracking-widest text-gold">
-                {i + 1} · {step.toUpperCase()}
-              </span>
-              <span className="text-sm text-muted">{what}</span>
-            </li>
-          ))}
-        </ol>
-        <p className="mt-4 text-sm text-muted">
-          The first baseline run lands on Day 11. Results, the failure heatmap and each
-          optimisation round will show here.
-        </p>
-      </Panel>
-    </main>
+        <ReceptionistCard />
+      </main>
+
+      <footer className="border-t border-rule px-4 py-5 text-center text-xs text-faint">
+        In an emergency, call 112. Asha books appointments; she doesn&apos;t give medical advice.
+      </footer>
+    </div>
   );
 }

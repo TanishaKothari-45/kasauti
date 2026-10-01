@@ -20,8 +20,8 @@ db-down: ## Stop Postgres
 api: ## Clinic API on :8000
 	uv run uvicorn clinic_api.main:app --reload --port 8000
 
-agent: ## Voice agent on :7860 (runs natively for Metal)
-	uv run python -m voice_agent.bot
+agent: ## Asha (voice agent) on :7860: text chat now, voice from Day 4
+	uv run uvicorn voice_agent.server:app --reload --port 7860
 
 web: ## Console on :3000
 	cd web && $(NVM) npm run dev

@@ -6,8 +6,8 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Kasauti console",
-  description: "Clinic voice receptionist and the harness that tests it.",
+  title: "Arogya Clinic",
+  description: "Talk to Asha, the clinic's Hindi and English voice receptionist.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

@@ -40,4 +40,4 @@ known-first-party = ["clinic_api", "voice_agent", "kasauti"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
-testpaths = ["services/clinic_api/tests"]
+testpaths = ["services/clinic_api/tests", "services/voice_agent/tests"]
